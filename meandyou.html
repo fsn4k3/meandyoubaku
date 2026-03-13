@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Me & You — Baku</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0907;
+    --charcoal: #131108;
+    --dark: #1c190e;
+    --mid: #2e2a18;
+    --amber: #b8960c;
+    --amber-light: #d4af37;
+    --cream: #f2e8c8;
+    --muted: #7a7050;
+    --white: #faf3dc;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--cream); overflow-x: hidden; }
+
+  /* TICKER */
+  .ticker-bar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 101;
+    background: var(--dark); color: var(--amber);
+    height: 32px; overflow: hidden; display: flex; align-items: center;
+    border-bottom: 1px solid var(--mid);
+  }
+  .ticker-track {
+    display: flex; gap: 0; white-space: nowrap;
+    animation: ticker 28s linear infinite;
+  }
+  .ticker-track span {
+    font-family: 'DM Sans', sans-serif; font-size: 0.7rem;
+    font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 0 3rem; color: var(--amber);
+  }
+  .ticker-dot {
+    display: inline-block; width: 4px; height: 4px;
+    background: var(--amber); border-radius: 50%;
+    opacity: 0.5; vertical-align: middle; margin: 0 0.5rem;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 32px; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(to bottom, rgba(10,9,8,0.95), transparent);
+  }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em; color: var(--white); text-decoration: none; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--amber-light); }
+  .lang-toggle { display: flex; gap: 0.5rem; }
+  .lang-btn { background: none; border: none; cursor: pointer; color: var(--muted); padding: 0.2rem 0.5rem; font-family: 'DM Sans', sans-serif; font-size: 0.72rem; letter-spacing: 0.12em; transition: color 0.3s; }
+  .lang-btn.active { color: var(--amber); border-bottom: 1px solid var(--amber); }
+
+  /* HERO */
+  .hero { height: 100vh; min-height: 600px; position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+  .hero-bg { position: absolute; inset: 0; background-image: url('background.jpg'); background-size: cover; background-position: center; background-attachment: fixed; }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,10,8,0.3) 0%, rgba(10,10,8,0.2) 50%, rgba(10,10,8,0.7) 100%); }
+  .grain { position: absolute; inset: 0; opacity: 0.12; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E"); pointer-events: none; }
+  .hero-eyebrow { position: relative; font-size: 0.7rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--amber); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 1s 0.3s forwards; }
+  .hero-title { position: relative; font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 16vw, 12rem); line-height: 0.9; letter-spacing: 0.04em; color: var(--white); opacity: 0; animation: fadeUp 1s 0.5s forwards; }
+  .hero-title span { color: var(--amber); }
+  .hero-subtitle { position: relative; font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1rem, 2.5vw, 1.4rem); color: var(--cream); margin-top: 1.5rem; opacity: 0; animation: fadeUp 1s 0.7s forwards; }
+  .hero-cta { position: relative; margin-top: 3rem; display: flex; gap: 1.2rem; opacity: 0; animation: fadeUp 1s 0.9s forwards; }
+  .btn-primary { padding: 0.85rem 2rem; background: #7a6408; color: var(--white); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; transition: background 0.3s, transform 0.2s; }
+  .btn-primary:hover { background: #9a8010; transform: translateY(-2px); }
+  .btn-outline { padding: 0.85rem 2rem; border: 1px solid var(--mid); color: var(--muted); text-decoration: none; font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; transition: border-color 0.3s, color 0.3s; }
+  .btn-outline:hover { border-color: var(--amber); color: var(--amber); }
+  .hero-scroll { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: fadeUp 1s 1.2s forwards; }
+  .hero-scroll span { font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--amber), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+
+  /* ABOUT */
+  .about { padding: 8rem 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; max-width: 1200px; margin: 0 auto; }
+  .section-label { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--amber); margin-bottom: 1.5rem; display: block; }
+  .about-title { font-family: 'Montserrat', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.05; color: var(--white); margin-bottom: 1.5rem; }
+  .about-body { font-size: 0.95rem; line-height: 1.8; color: var(--muted); margin-bottom: 2rem; }
+  .about-stats { display: flex; gap: 3rem; margin-top: 2.5rem; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; color: var(--amber); display: block; line-height: 1; }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; display: block; }
+  .about-image-grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px; gap: 8px; }
+  .img-placeholder { background: var(--charcoal); position: relative; overflow: hidden; display: flex; align-items: flex-end; padding: 1rem; }
+  .img-placeholder:first-child { grid-row: 1 / 3; }
+  .img-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); position: relative; z-index: 1; }
+  .img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,9,8,0.7), transparent 60%); }
+
+  /* ATMOSPHERE */
+  .atmosphere { padding: 0 0 8rem; text-align: center; }
+  .atm-header { padding: 0 3rem 4rem; }
+  .atm-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 6rem); color: var(--white); line-height: 1; }
+  .atm-title em { color: var(--amber); font-family: 'Playfair Display', serif; font-style: italic; }
+  .atm-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 320px 220px; gap: 6px; max-width: 1400px; margin: 0 auto; padding: 0 1rem; }
+  .atm-cell { background: var(--charcoal); position: relative; overflow: hidden; }
+  .atm-cell:first-child { grid-row: 1 / 3; }
+  .atm-cell-label { position: absolute; bottom: 1.2rem; left: 1.2rem; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(250,248,244,0.6); }
+  .atm-cell-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(200,131,42,0.04), transparent); }
+
+  /* =============================================
+     MENU — base styles
+     ============================================= */
+  .menu-section { padding: 8rem 3rem; max-width: 1100px; margin: 0 auto; }
+
+  .menu-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem; padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--mid);
+  }
+
+  .menu-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--white); line-height: 1; }
+
+  /* Tab row — scrollable single line on mobile */
+  .menu-tabs {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .menu-tabs::-webkit-scrollbar { display: none; }
+
+  .tab-btn {
+    flex: 0 0 auto; /* never shrink / wrap */
+    padding: 0.5rem 1.2rem;
+    background: none; border: 1px solid var(--mid);
+    color: var(--muted); cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    white-space: nowrap;
+    transition: all 0.3s;
+  }
+  .tab-btn.active { background: var(--amber); border-color: var(--amber); color: #0a0a09; }
+  .tab-btn:hover:not(.active) { border-color: var(--amber); color: var(--amber); }
+
+  .menu-panel { display: none; }
+  .menu-panel.active { display: block; }
+
+  /* Two-column grid inside panels */
+  .menu-panel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+
+  .menu-category { margin-bottom: 3rem; }
+
+  .menu-cat-title {
+    font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.08em;
+    color: var(--amber); margin-bottom: 1.2rem; padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--mid);
+  }
+
+  .menu-items { list-style: none; }
+  .menu-item { display: flex; justify-content: space-between; align-items: baseline; padding: 0.75rem 0; border-bottom: 1px solid rgba(58,54,50,0.4); }
+  .menu-item:last-child { border-bottom: none; }
+  .item-name { font-size: 0.88rem; color: var(--cream); letter-spacing: 0.02em; }
+  .item-dots { flex: 1; border-bottom: 1px dotted var(--mid); margin: 0 1rem; min-width: 20px; position: relative; top: -4px; }
+  .item-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--amber); letter-spacing: 0.05em; }
+
+  /* DRINKS / FOODS SHOWCASE */
+  .drinks-showcase { padding: 4rem 0 8rem; background: var(--charcoal); overflow: hidden; }
+  .foods-showcase { padding: 4rem 0 8rem; background: var(--black); overflow: hidden; }
+  .showcase-header { padding: 0 3rem 3rem; display: flex; justify-content: space-between; align-items: flex-end; }
+  .showcase-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem); color: var(--white); }
+  .showcase-sub { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+  .drinks-strip { display: flex; gap: 12px; padding: 0 3rem; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .drinks-strip::-webkit-scrollbar { display: none; }
+
+  .drink-card { flex: 0 0 240px; height: 320px; background: var(--dark); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; }
+  .drink-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,9,8,0.85), transparent 50%); }
+  .drink-name { position: relative; z-index: 1; font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.06em; color: var(--white); line-height: 1.1; }
+  .drink-price-tag { position: relative; z-index: 1; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--amber); margin-top: 0.3rem; }
+  .drink-icon { position: absolute; top: 1.5rem; right: 1.5rem; z-index: 1; width: 40px; height: 40px; border: 1px solid rgba(200,131,42,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+
+  .food-card { flex: 0 0 300px; height: 380px; background: var(--dark); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; transition: transform 0.35s ease; }
+  .food-card:hover { transform: translateY(-6px); }
+  .food-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,9,8,0.92) 35%, rgba(10,9,8,0.15) 70%, transparent); }
+  .food-tag { position: absolute; top: 1.2rem; left: 1.2rem; z-index: 1; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; background: var(--amber); color: #0a0a09; padding: 0.25rem 0.65rem; }
+  .food-name { position: relative; z-index: 1; font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.06em; color: var(--white); line-height: 1.05; }
+  .food-desc { position: relative; z-index: 1; font-size: 0.72rem; color: var(--muted); margin-top: 0.4rem; line-height: 1.5; }
+  .food-price-tag { position: relative; z-index: 1; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--amber); letter-spacing: 0.08em; margin-top: 0.7rem; }
+
+  /* VISIT */
+  .visit-section { padding: 8rem 3rem; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; }
+  .visit-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--white); line-height: 1; margin-bottom: 2.5rem; }
+  .visit-detail { display: flex; gap: 1.5rem; margin-bottom: 2rem; align-items: flex-start; }
+  .visit-icon { width: 36px; height: 36px; flex-shrink: 0; border: 1px solid var(--mid); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+  .visit-detail-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); display: block; margin-bottom: 0.3rem; }
+  .visit-detail-value { font-size: 0.9rem; color: var(--cream); line-height: 1.6; }
+  .visit-ig-link { font-size: 0.9rem; color: var(--cream); text-decoration: none; line-height: 1.6; transition: color 0.3s; }
+  .visit-ig-link:hover { color: var(--amber); }
+  .map-placeholder { background: var(--charcoal); height: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 1px solid var(--mid); }
+  .map-grid { position: absolute; inset: 0; opacity: 0.15; background-image: linear-gradient(var(--mid) 1px, transparent 1px), linear-gradient(90deg, var(--mid) 1px, transparent 1px); background-size: 40px 40px; }
+  .map-pin { position: relative; z-index: 1; text-align: center; }
+  .map-pin-dot { width: 16px; height: 16px; background: var(--amber); border-radius: 50%; margin: 0 auto 0.5rem; box-shadow: 0 0 0 6px rgba(200,131,42,0.2), 0 0 0 12px rgba(200,131,42,0.1); animation: pulse 2s ease-in-out infinite; }
+  .map-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); }
+
+  /* FOOTER RICH */
+  footer { background: var(--charcoal); border-top: 1px solid var(--mid); padding: 4rem 3rem 2rem; }
+  .footer-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 3rem; margin-bottom: 3rem; flex-wrap: wrap; }
+  .footer-brand .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 0.1em; color: var(--white); }
+  .footer-brand .footer-tagline { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.1em; margin-top: 0.4rem; max-width: 220px; line-height: 1.6; }
+  .footer-col-title { font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--amber); margin-bottom: 1rem; display: block; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.8rem; letter-spacing: 0.05em; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-contact-line { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.7rem; }
+  .footer-contact-line a, .footer-contact-line span { color: var(--muted); text-decoration: none; font-size: 0.8rem; transition: color 0.3s; }
+  .footer-contact-line a:hover { color: var(--cream); }
+  .footer-bottom { border-top: 1px solid var(--mid); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-copy { font-size: 0.68rem; color: var(--mid); letter-spacing: 0.08em; }
+  .footer-madeby { font-size: 0.68rem; color: var(--mid); letter-spacing: 0.06em; }
+  .footer-madeby a { color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; transition: color 0.3s, border-color 0.3s; }
+  .footer-madeby a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 6px rgba(200,131,42,0.2), 0 0 0 12px rgba(200,131,42,0.1); } 50% { box-shadow: 0 0 0 10px rgba(200,131,42,0.15), 0 0 0 20px rgba(200,131,42,0.05); } }
+
+  .divider { width: 60px; height: 1px; background: var(--amber); margin: 1.5rem 0; }
+
+  /* LANG */
+  [data-lang] { display: none; }
+  [data-lang="en"] { display: block; }
+  span[data-lang] { display: inline; }
+  span[data-lang="az"] { display: none; }
+
+  /* HAMBURGER */
+  .hamburger { display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--cream); transition: all 0.3s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(10,9,8,0.98); z-index: 99; flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem; }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; letter-spacing: 0.1em; color: var(--cream); text-decoration: none; transition: color 0.3s; }
+  .mobile-menu a:hover { color: var(--amber); }
+
+  /* =============================================
+     RESPONSIVE — tablet ≤900px
+     ============================================= */
+  @media (max-width: 900px) {
+    .about { grid-template-columns: 1fr; gap: 3rem; padding: 6rem 2rem; }
+    .visit-section { grid-template-columns: 1fr; gap: 3rem; padding: 6rem 2rem; }
+    .menu-header { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .menu-tabs { width: 100%; }
+    .atm-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 280px 200px 200px; }
+    .atm-cell:first-child { grid-column: 1 / 3; grid-row: 1; }
+    .menu-panel-grid { grid-template-columns: 1fr; gap: 0; }
+  }
+
+  /* =============================================
+     RESPONSIVE — mobile ≤600px  (most iPhones)
+     ============================================= */
+  @media (max-width: 600px) {
+    /* NAV */
+    nav { padding: 1rem 1.2rem; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+
+    /* HERO */
+    .hero { padding: 0 1.2rem; }
+    .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.2em; }
+    .hero-cta { flex-direction: column; align-items: center; gap: 0.8rem; width: 100%; max-width: 280px; }
+    .btn-primary, .btn-outline { text-align: center; width: 100%; padding: 1rem; }
+
+    /* ABOUT */
+    .about { padding: 5rem 1.2rem 4rem; gap: 2.5rem; }
+    .about-stats { gap: 1.8rem; }
+    .stat-num { font-size: 2rem; }
+    .about-image-grid { grid-template-rows: 180px 140px; }
+
+    /* ATMOSPHERE */
+    .atm-header { padding: 0 1.2rem 2.5rem; }
+    .atm-grid { grid-template-columns: 1fr; grid-template-rows: 260px 180px 180px 180px 180px; padding: 0 1.2rem; }
+    .atm-cell:first-child { grid-column: 1; grid-row: 1; }
+
+    /* ---- MENU ---- */
+    .menu-section {
+      padding: 4rem 0; /* remove side padding — tabs need full width */
+    }
+
+    .menu-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 0;
+      padding: 0 1.2rem 1.2rem;
+      border-bottom: none;
+    }
+
+    .menu-title { font-size: 2.2rem; }
+
+    /* Tab row: sticky underline bar, scrollable */
+    .menu-tabs {
+      width: 100%;
+      gap: 0;
+      border-bottom: 1px solid var(--mid);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      flex: 1 0 auto;        /* equal width, no shrink */
+      min-width: 0;          /* allow text to drive width */
+      padding: 0.7rem 0.9rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      border: none;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      background: none;
+      color: var(--muted);
+    }
+
+    .tab-btn.active {
+      background: none;
+      color: var(--amber);
+      border-bottom: 2px solid var(--amber);
+    }
+
+    /* Content area gets its own padding */
+    .menu-panel { padding: 1.5rem 1.2rem 0; }
+
+    /* Single-column items */
+    .menu-panel-grid { grid-template-columns: 1fr; gap: 0; }
+
+    .menu-category { margin-bottom: 1.8rem; }
+
+    .menu-cat-title { font-size: 1.3rem; margin-bottom: 0.8rem; }
+
+    .menu-item { padding: 0.6rem 0; }
+    .item-name { font-size: 0.82rem; }
+    .item-price { font-size: 0.95rem; }
+
+    /* DRINKS / FOODS */
+    .drinks-showcase, .foods-showcase { padding: 3rem 0 5rem; }
+    .showcase-header { padding: 0 1.2rem 2rem; }
+    .drinks-strip { padding: 0 1.2rem; gap: 8px; }
+    .drink-card { flex: 0 0 180px; height: 260px; padding: 1.2rem; }
+    .drink-name { font-size: 1.1rem; }
+    .food-card { flex: 0 0 220px; height: 300px; padding: 1.2rem; }
+    .food-name { font-size: 1.3rem; }
+
+    /* VISIT */
+    .visit-section { padding: 4rem 1.2rem; }
+    .map-placeholder { min-height: 240px; }
+
+    /* FOOTER */
+    footer { padding: 3rem 1.2rem 1.5rem; }
+    .footer-top { flex-direction: column; gap: 2rem; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  }
+
+  /* =============================================
+     RESPONSIVE — very small ≤380px (iPhone SE)
+     ============================================= */
+  @media (max-width: 380px) {
+    .hero-title { font-size: 4.5rem; }
+    .about-stats { flex-direction: column; gap: 1.2rem; }
+    .tab-btn { padding: 0.65rem 0.6rem; font-size: 0.58rem; letter-spacing: 0.07em; }
+    .drink-card { flex: 0 0 160px; height: 240px; }
+    .food-card { flex: 0 0 190px; height: 270px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track">
+    <span>New spot in Baku <span class="ticker-dot"></span> Take pictures, tag us @meandyoubaku <span class="ticker-dot"></span> Trending coffee & fresh bowls <span class="ticker-dot"></span> Your new favorite vibe <span class="ticker-dot"></span> Come for coffee, stay for the aesthetic <span class="ticker-dot"></span></span>
+    <span>New spot in Baku <span class="ticker-dot"></span> Take pictures, tag us @meandyoubaku <span class="ticker-dot"></span> Trending coffee & fresh bowls <span class="ticker-dot"></span> Your new favorite vibe <span class="ticker-dot"></span> Come for coffee, stay for the aesthetic <span class="ticker-dot"></span></span></div>
+</div>
+
+<!-- MOBILE MENU OVERLAY -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMobile()"><span data-lang="en">About</span><span data-lang="az" style="display:none">Haqqında</span></a>
+  <a href="#atmosphere" onclick="closeMobile()"><span data-lang="en">Atmosphere</span><span data-lang="az" style="display:none">Atmosfer</span></a>
+  <a href="#menu" onclick="closeMobile()"><span data-lang="en">Menu</span><span data-lang="az" style="display:none">Menyu</span></a>
+  <a href="#visit" onclick="closeMobile()"><span data-lang="en">Visit</span><span data-lang="az" style="display:none">Gəlin</span></a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="meandyoulogo.png" alt="Me & You" style="height:36px;width:36px;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(200,131,42,0.3));vertical-align:middle;margin-right:0.5rem;">Me &amp; You</a>
+  <ul class="nav-links">
+    <li><a href="#about" data-nav>About</a></li>
+    <li><a href="#atmosphere" data-nav>Atmosphere</a></li>
+    <li><a href="#menu" data-nav>Menu</a></li>
+    <li><a href="#visit" data-nav>Visit</a></li>
+  </ul>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('az')">AZ</button>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMobile()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="grain"></div>
+  <p class="hero-eyebrow">
+    <span data-lang="en">Baku · Coffee Shop · Est. 2026</span>
+    <span data-lang="az">Bakı · Kofe Şop · 2026-ci il</span>
+  </p>
+  <h1 class="hero-title">Me<span>&</span>You</h1>
+  <p class="hero-subtitle">
+    <span data-lang="en">A different atmosphere. A new place.</span>
+    <span data-lang="az">Kiçik anlar böyük hisslərə çevrilir. Burada hər şey zövq üçündür.</span>
+  </p>
+  <div class="hero-cta">
+    <a href="#menu" class="btn-primary">
+      <span data-lang="en">View Menu</span>
+      <span data-lang="az">Menyuya bax</span>
+    </a>
+    <a href="#visit" class="btn-outline">
+      <span data-lang="en">Find Us</span>
+      <span data-lang="az">Bizi tapın</span>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <span data-lang="en">Scroll</span>
+    <span data-lang="az" style="display:none">Davam et</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-text">
+    <span class="section-label">
+      <span data-lang="en">Who We Are</span>
+      <span data-lang="az">Biz kimik</span>
+    </span>
+    <h2 class="about-title">
+      <span data-lang="en">More Than<br>Just Coffee</span>
+      <span data-lang="az">Bir<br>Kofedən Daha Çoxu</span>
+    </h2>
+    <div class="divider"></div>
+    <p class="about-body">
+      <span data-lang="en">Me & You is a new-generation coffee shop in the heart of Baku where raw concrete meets artistic soul. A space built for those who crave a different experience: bold coffee, colorful bowls, and an atmosphere unlike anything else in the city.</span>
+      <span data-lang="az">Me & You Bakının mərkəzində yerləşən yeni nəsil kofe məkanıdır. Burada xam beton üslubu yaradıcı ruhla birləşir. Fərqli təcrübə axtaranlar üçün yaradılmış bir məkan: güclü kofe, rəngarəng qablar və şəhərdə bənzəri olmayan atmosfer.</span>
+    </p>
+    <div class="about-stats">
+      <div>
+        <span class="stat-num">08:00</span>
+        <span class="stat-label"><span data-lang="en">Opens Daily</span><span data-lang="az">Hər gün açılır</span></span>
+      </div>
+      <div>
+        <span class="stat-num">00:00</span>
+        <span class="stat-label"><span data-lang="en">Late Night</span><span data-lang="az">Gecə yuxusuz</span></span>
+      </div>
+      <div>
+        <span class="stat-num">40+</span>
+        <span class="stat-label"><span data-lang="en">Menu Items</span><span data-lang="az">Menyu seçimi</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="about-image-grid">
+    <div class="img-placeholder" style="background-image: url('background.jpg'); background-size: cover; background-position: center;">
+      <div class="img-overlay"></div>
+      <span class="img-label"><span data-lang="en">Interior</span><span data-lang="az">İnteryer</span></span>
+    </div>
+    <div class="img-placeholder" style="background-image: url('photo_5305565954383221852_w.jpg'); background-size: cover; background-position: center;">
+      <div class="img-overlay"></div>
+      <span class="img-label"><span data-lang="en">Drinks</span><span data-lang="az">İçkilər</span></span>
+    </div>
+    <div class="img-placeholder" style="background-image: url('menu pics/foods.jpeg'); background-size: cover; background-position: center;">
+      <div class="img-overlay"></div>
+      <span class="img-label"><span data-lang="en">Food</span><span data-lang="az">Yemək</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ATMOSPHERE -->
+<section class="atmosphere" id="atmosphere">
+  <div class="atm-header">
+    <span class="section-label"><span data-lang="en">The Space</span><span data-lang="az">Məkan</span></span>
+    <h2 class="atm-title">
+      <span data-lang="en">Raw. <em>Artistic.</em> Alive.</span>
+      <span data-lang="az">Xam. <em>Sənətkar.</em> Canlı.</span>
+    </h2>
+  </div>
+  <div class="atm-grid">
+    <div class="atm-cell" style="background-image: url('photo_5305565954383221848_w.jpg'); background-size: cover; background-position: center;">
+      <div class="atm-cell-overlay"></div>
+      <span class="atm-cell-label"><span data-lang="en">Main Floor</span><span data-lang="az">Əsas Mərtəbə</span></span>
+    </div>
+    <div class="atm-cell" style="background-image: url('photo_5305565954383221853_w.jpg'); background-size: cover; background-position: center;">
+      <div class="atm-cell-overlay"></div>
+      <span class="atm-cell-label"><span data-lang="en">Graffiti Wall</span><span data-lang="az">Qraffiti Divar</span></span>
+    </div>
+    <div class="atm-cell" style="background-image: url('photo_5305565954383221849_w.jpg'); background-size: cover; background-position: center;">
+      <div class="atm-cell-overlay"></div>
+      <span class="atm-cell-label"><span data-lang="en">Bar</span><span data-lang="az">Bar</span></span>
+    </div>
+    <div class="atm-cell" style="background-image: url('photo_5305565954383221846_w.jpg'); background-size: cover; background-position: center;">
+      <div class="atm-cell-overlay"></div>
+      <span class="atm-cell-label"><span data-lang="en">Underground Zone</span><span data-lang="az">Underground Zona</span></span>
+    </div>
+    <div class="atm-cell" style="background-image: url('photo_5305565954383221856_w.jpg'); background-size: cover; background-position: center;">
+      <div class="atm-cell-overlay"></div>
+      <span class="atm-cell-label"><span data-lang="en">Lounge</span><span data-lang="az">Lounge</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-section" id="menu">
+  <div class="menu-header">
+    <div>
+      <span class="section-label">
+        <span data-lang="en">What We Serve</span>
+        <span data-lang="az">Nə təqdim edirik</span>
+      </span>
+      <h2 class="menu-title">
+        <span data-lang="en">Our Menu</span>
+        <span data-lang="az">Menyumuz</span>
+      </h2>
+    </div>
+    <div class="menu-tabs" id="menuTabs">
+      <button class="tab-btn active" onclick="switchTab('coffee',this)">
+        <span data-lang="en">Coffee</span><span data-lang="az">Qəhvə</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('iced',this)">
+        <span data-lang="en">Iced</span><span data-lang="az">Soyuq</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('food',this)">
+        <span data-lang="en">Food</span><span data-lang="az">Yemək</span>
+      </button>
+      <button class="tab-btn" onclick="switchTab('other',this)">
+        <span data-lang="en">More</span><span data-lang="az">Digər</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- COFFEE -->
+  <div class="menu-panel active" id="tab-coffee">
+    <div class="menu-panel-grid">
+      <div class="menu-category">
+        <div class="menu-cat-title">Coffee</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Espresso</span><span class="item-dots"></span><span class="item-price">3.50</span></li>
+          <li class="menu-item"><span class="item-name">Double Espresso</span><span class="item-dots"></span><span class="item-price">5.00</span></li>
+          <li class="menu-item"><span class="item-name">Ristretto</span><span class="item-dots"></span><span class="item-price">4.00</span></li>
+          <li class="menu-item"><span class="item-name">Americano</span><span class="item-dots"></span><span class="item-price">6.00</span></li>
+          <li class="menu-item"><span class="item-name">Long Black</span><span class="item-dots"></span><span class="item-price">6.00</span></li>
+          <li class="menu-item"><span class="item-name">Machiato</span><span class="item-dots"></span><span class="item-price">5.00</span></li>
+          <li class="menu-item"><span class="item-name">Cappuccino</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Latte</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Spanish Latte</span><span class="item-dots"></span><span class="item-price">7.50</span></li>
+          <li class="menu-item"><span class="item-name">Flat White</span><span class="item-dots"></span><span class="item-price">7.50</span></li>
+          <li class="menu-item"><span class="item-name">Raf Coffee</span><span class="item-dots"></span><span class="item-price">7.50</span></li>
+          <li class="menu-item"><span class="item-name">Caramel Latte</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Banana Latte</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Chocolate Latte</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Chemex</span><span class="item-dots"></span><span class="item-price">12.00</span></li>
+          <li class="menu-item"><span class="item-name">Harivo V6</span><span class="item-dots"></span><span class="item-price">12.00</span></li>
+        </ul>
+      </div>
+      <div class="menu-category">
+        <div class="menu-cat-title">Matcha</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Hot Matcha Latte</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Iced Matcha Latte</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Iced Mango Latte</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Strawberry Matcha</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Tonic Matcha</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Foam Vanilla Matcha</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Coconut Matcha</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Matcha Heaven</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+        </ul>
+        <div class="menu-cat-title" style="margin-top:2rem;">Extras</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Espresso Shot</span><span class="item-dots"></span><span class="item-price">2.00</span></li>
+          <li class="menu-item"><span class="item-name">Syrup</span><span class="item-dots"></span><span class="item-price">2.00</span></li>
+          <li class="menu-item"><span class="item-name">Light Milk</span><span class="item-dots"></span><span class="item-price">1.20</span></li>
+          <li class="menu-item"><span class="item-name">Almond Milk</span><span class="item-dots"></span><span class="item-price">3.00</span></li>
+          <li class="menu-item"><span class="item-name">Coconut Milk</span><span class="item-dots"></span><span class="item-price">3.00</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ICED -->
+  <div class="menu-panel" id="tab-iced">
+    <div class="menu-panel-grid">
+      <div class="menu-category">
+        <div class="menu-cat-title">Iced Coffee</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Iced Americano</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Iced Latte</span><span class="item-dots"></span><span class="item-price">7.50</span></li>
+          <li class="menu-item"><span class="item-name">Espresso Orange Tonic</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Espresso Tonic</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Iced Mocha</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Cherry Choco Americano</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Iced Raf</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Iced Foam Americano</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+          <li class="menu-item"><span class="item-name">Iced Foam Caramel</span><span class="item-dots"></span><span class="item-price">9.00</span></li>
+        </ul>
+      </div>
+      <div class="menu-category">
+        <div class="menu-cat-title">Iced Tea</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Peach Tea</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Mango Tea</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Apple-Pineapple Tea</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Raspberry Tea</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+        </ul>
+        <div class="menu-cat-title" style="margin-top:2rem;">Milkshake</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Vanilla</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Choco</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Banana</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+          <li class="menu-item"><span class="item-name">Strawberry</span><span class="item-dots"></span><span class="item-price">8.50</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOD -->
+  <div class="menu-panel" id="tab-food">
+    <div class="menu-panel-grid">
+      <div class="menu-category">
+        <div class="menu-cat-title">Bowl</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Meat Bowl</span><span class="item-dots"></span><span class="item-price">15.00</span></li>
+          <li class="menu-item"><span class="item-name">Chicken Bowl</span><span class="item-dots"></span><span class="item-price">15.00</span></li>
+          <li class="menu-item"><span class="item-name">Ton Bowl</span><span class="item-dots"></span><span class="item-price">15.00</span></li>
+          <li class="menu-item"><span class="item-name">Cheese Bowl</span><span class="item-dots"></span><span class="item-price">12.00</span></li>
+          <li class="menu-item"><span class="item-name">Green Bowl</span><span class="item-dots"></span><span class="item-price">10.00</span></li>
+        </ul>
+        <div class="menu-cat-title" style="margin-top:2rem;">Sandwich</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Classic</span><span class="item-dots"></span><span class="item-price">9.00</span></li>
+          <li class="menu-item"><span class="item-name">Morning Sandwich</span><span class="item-dots"></span><span class="item-price">10.00</span></li>
+          <li class="menu-item"><span class="item-name">Ton Avocado</span><span class="item-dots"></span><span class="item-price">14.50</span></li>
+          <li class="menu-item"><span class="item-name">Kavurma Sandwich</span><span class="item-dots"></span><span class="item-price">10.00</span></li>
+          <li class="menu-item"><span class="item-name">Cheese Sandwich</span><span class="item-dots"></span><span class="item-price">8.00</span></li>
+        </ul>
+      </div>
+      <div class="menu-category">
+        <div class="menu-cat-title">Waffle</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Waffle</span><span class="item-dots"></span><span class="item-price">9.00</span></li>
+          <li class="menu-item"><span class="item-name">Waffle Bowl</span><span class="item-dots"></span><span class="item-price">10.00</span></li>
+          <li class="menu-item"><span class="item-name">Waffle Sandwich</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Waffle Love</span><span class="item-dots"></span><span class="item-price">9.00</span></li>
+          <li class="menu-item"><span class="item-name">Waffle Cup</span><span class="item-dots"></span><span class="item-price">9.00</span></li>
+          <li class="menu-item"><span class="item-name">Waffle Slide</span><span class="item-dots"></span><span class="item-price">4.00</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OTHER -->
+  <div class="menu-panel" id="tab-other">
+    <div class="menu-panel-grid">
+      <div class="menu-category">
+        <div class="menu-cat-title">Tea</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Black Tea</span><span class="item-dots"></span><span class="item-price">5.00</span></li>
+          <li class="menu-item"><span class="item-name">Jasmin Tea</span><span class="item-dots"></span><span class="item-price">5.00</span></li>
+          <li class="menu-item"><span class="item-name">Green Tea</span><span class="item-dots"></span><span class="item-price">5.00</span></li>
+        </ul>
+      </div>
+      <div class="menu-category">
+        <div class="menu-cat-title">Beverages</div>
+        <ul class="menu-items">
+          <li class="menu-item"><span class="item-name">Nar Suyu (Pomegranate)</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Orange Juice</span><span class="item-dots"></span><span class="item-price">7.00</span></li>
+          <li class="menu-item"><span class="item-name">Su (Water)</span><span class="item-dots"></span><span class="item-price">3.00</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE DRINKS -->
+<section class="drinks-showcase">
+  <div class="showcase-header">
+    <div>
+      <h2 class="showcase-title">
+        <span data-lang="en">Signature Drinks</span>
+        <span data-lang="az" style="font-family: 'Montserrat', sans-serif;">İmza İçkilər</span>
+      </h2>
+      <p class="showcase-sub">
+        <span data-lang="en">Crafted with care</span>
+        <span data-lang="az">Sevgiylə hazırlanmış</span>
+      </p>
+    </div>
+  </div>
+  <div class="drinks-strip">
+    <div class="drink-card" style="background-image: url('menu pics/iced americano.jpeg'); background-size: cover; background-position: center;">
+      <div class="drink-icon">☕</div>
+      <div class="drink-name">Iced Foam<br>Americano</div>
+      <div class="drink-price-tag">8.00 ₼</div>
+    </div>
+    <div class="drink-card" style="background-image: url('menu pics/lavanda-matcha.jpeg'); background-size: cover; background-position: center;">
+      <div class="drink-icon">🍵</div>
+      <div class="drink-name">Lavanda<br>Matcha</div>
+      <div class="drink-price-tag">8.50 ₼</div>
+    </div>
+    <div class="drink-card" style="background-image: url('menu pics/milkshake.jpeg'); background-size: cover; background-position: center;">
+      <div class="drink-icon">🍫</div>
+      <div class="drink-name">Choco<br>Milkshake</div>
+      <div class="drink-price-tag">8.50 ₼</div>
+    </div>
+    <div class="drink-card" style="background-image: url('menu pics/raf.jpeg'); background-size: cover; background-position: center;">
+      <div class="drink-icon">☕</div>
+      <div class="drink-name">Raf<br>Coffee</div>
+      <div class="drink-price-tag">7.50 ₼</div>
+    </div>
+    <div class="drink-card" style="background-image: url('menu pics/choco.jpeg'); background-size: cover; background-position: center;">
+      <div class="drink-icon">🥛</div>
+      <div class="drink-name">Hot<br>Chocolate</div>
+      <div class="drink-price-tag">— ₼</div>
+    </div>
+    <div class="drink-card" style="background-image: url('menu pics/iced latte.jpeg'); background-size: cover; background-position: center;">
+      <div class="drink-icon">🍋</div>
+      <div class="drink-name">Cherry Choco<br>Americano</div>
+      <div class="drink-price-tag">8.00 ₼</div>
+    </div>
+  </div>
+</section>
+
+<!-- SIGNATURE FOODS -->
+<section class="foods-showcase">
+  <div class="showcase-header">
+    <div>
+      <h2 class="showcase-title">
+        <span data-lang="en">Signature Foods</span>
+        <span data-lang="az" style="font-family: 'Montserrat', sans-serif;">İmza Yeməklər</span>
+      </h2>
+      <p class="showcase-sub">
+        <span data-lang="en">Made fresh, every day</span>
+        <span data-lang="az">Hər gün təzə hazırlanır</span>
+      </p>
+    </div>
+  </div>
+  <div class="drinks-strip">
+    <div class="food-card" style="background-image: url('menu pics/chicken bowl.jpeg'); background-size: cover; background-position: center;">
+      <div class="food-tag"><span data-lang="en">Bowl</span><span data-lang="az">Bowl</span></div>
+      <div class="food-name">Chicken<br>Bowl</div>
+      <div class="food-desc">
+        <span data-lang="en">Broccoli, corn, cherry tomato, carrot, sauce</span>
+        <span data-lang="az">Brokoli, qarğıdalı, pomidor, yerkökü, sous</span>
+      </div>
+      <div class="food-price-tag">15.00 ₼</div>
+    </div>
+    <div class="food-card" style="background-image: url('menu pics/veggy bowl.jpeg'); background-size: cover; background-position: center;">
+      <div class="food-tag"><span data-lang="en">Bowl</span><span data-lang="az">Bowl</span></div>
+      <div class="food-name">Veggy<br>Bowl</div>
+      <div class="food-desc">
+        <span data-lang="en">Chickpeas, greens, broccoli, corn, fresh herbs</span>
+        <span data-lang="az">Noxud, göyərti, brokoli, qarğıdalı, ot</span>
+      </div>
+      <div class="food-price-tag">10.00 ₼</div>
+    </div>
+    <div class="food-card" style="background-image: url('menu pics/makarna chicken bowl.jpeg'); background-size: cover; background-position: center;">
+      <div class="food-tag"><span data-lang="en">Sandwich</span><span data-lang="az">Sendviç</span></div>
+      <div class="food-name">Makarna<br>Chicken<br>Bowl</div>
+      <div class="food-desc">
+        <span data-lang="en">Makarna, corn, cherry tomato, carrot, sauce</span>
+        <span data-lang="az">Makarna, qarğıdalı, pomidor, yerkökü, sous</span>
+      </div>
+      <div class="food-price-tag">14.50 ₼</div>
+    </div>
+    <div class="food-card" style="background-image: url('menu pics/foods.jpeg'); background-size: cover; background-position: center;">
+      <div class="food-tag"><span data-lang="en">Set</span><span data-lang="az">Set</span></div>
+      <div class="food-name">Set</div>
+      <div class="food-desc">
+        <span data-lang="en">Set for 3 people</span>
+        <span data-lang="az">3 nəfərlik set</span>
+      </div>
+      <div class="food-price-tag">9.00 ₼</div>
+    </div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section class="visit-section" id="visit">
+  <div>
+    <span class="section-label">
+      <span data-lang="en">Come See Us</span>
+      <span data-lang="az">Bizə gəlin</span>
+    </span>
+    <h2 class="visit-title">
+      <span data-lang="en">Find<br>Me & You</span>
+      <span data-lang="az">Me & You-u<br>tapın</span>
+    </h2>
+    <div class="visit-detail">
+      <div class="visit-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div>
+        <span class="visit-detail-label"><span data-lang="en">Hours</span><span data-lang="az">İş saatları</span></span>
+        <span class="visit-detail-value"><span data-lang="en">Daily - 08:00 to 00:00</span><span data-lang="az">Hər gün - 08:00 - 00:00</span></span>
+      </div>
+    </div>
+    <div class="visit-detail">
+      <div class="visit-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div>
+        <span class="visit-detail-label"><span data-lang="en">Location</span><span data-lang="az">Ünvan</span></span>
+        <span class="visit-detail-value">Vladislav Plotnikov küçesi, Baku 1007, Azerbaijan</span>
+      </div>
+    </div>
+    <div class="visit-detail">
+      <div class="visit-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 12.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </div>
+      <div>
+        <span class="visit-detail-label"><span data-lang="en">Phone</span><span data-lang="az">Telefon</span></span>
+        <a href="tel:+994505786029" class="visit-ig-link">050 578 60 29</a>
+      </div>
+    </div>
+    <div class="visit-detail">
+      <div class="visit-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="var(--amber)" stroke="none"/>
+        </svg>
+      </div>
+      <div>
+        <span class="visit-detail-label">Instagram</span>
+        <a href="https://instagram.com/meandyoubaku" target="_blank" class="visit-ig-link">@meandyoubaku</a>
+      </div>
+    </div>
+    <a href="https://maps.app.goo.gl/VQ6tmCtWmNXGfWYc7" class="btn-primary" style="display:inline-block;margin-top:1.5rem;">
+      <span data-lang="en">Get Directions</span>
+      <span data-lang="az">Yol göstər</span>
+    </a>
+  </div>
+  <div class="map-placeholder" style="padding:0;overflow:hidden;">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3039.0913120060914!2d49.845757299999995!3d40.3846688!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d65702c4ed5%3A0x26be1e4d6d153826!2sMe%20%26%20You!5e0!3m2!1sen!2saz!4v1773410686413!5m2!1sen!2saz" width="100%" height="100%" style="border:0;min-height:400px;display:block;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-logo">Me &amp; You</div>
+      <div class="footer-tagline">
+        <span data-lang="en">A different atmosphere. Baku.</span>
+        <span data-lang="az">Kiçik anlar böyük hisslərə çevrilir.</span>
+      </div>
+    </div>
+
+    <div>
+      <span class="footer-col-title"><span data-lang="en">Navigate</span><span data-lang="az">Naviqasiya</span></span>
+      <ul class="footer-links">
+        <li><a href="#about"><span data-lang="en">About</span><span data-lang="az">Haqqında</span></a></li>
+        <li><a href="#atmosphere"><span data-lang="en">Atmosphere</span><span data-lang="az">Atmosfer</span></a></li>
+        <li><a href="#menu"><span data-lang="en">Menu</span><span data-lang="az">Menyu</span></a></li>
+        <li><a href="#visit"><span data-lang="en">Visit</span><span data-lang="az">Gəlin</span></a></li>
+      </ul>
+    </div>
+
+    <div>
+      <span class="footer-col-title"><span data-lang="en">Get in Touch</span><span data-lang="az">Əlaqə</span></span>
+      <div class="footer-contact-line">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.9 12.5a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.81 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <a href="tel:+994505786029">050 578 60 29</a>
+      </div>
+      <div class="footer-contact-line">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="var(--amber)" stroke="none"/></svg>
+        <a href="https://instagram.com/meandyoubaku" target="_blank">@meandyoubaku</a>
+      </div>
+      <div class="footer-contact-line">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Vladislav Plotnikov küçesi, Baku 1007</span>
+      </div>
+    </div>
+
+    <div>
+      <span class="footer-col-title"><span data-lang="en">Hours</span><span data-lang="az">İş saatları</span></span>
+      <ul class="footer-links">
+        <li><span style="color:var(--cream);font-size:0.8rem;">
+          <span data-lang="en">Every day</span><span data-lang="az">Hər gün</span>
+        </span></li>
+        <li><span style="color:var(--amber);font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:0.08em;">08:00 — 00:00</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Me &amp; You · Baku, Azerbaijan</div>
+    <div class="footer-madeby">
+      <span data-lang="en">Designed &amp; built by </span><span data-lang="az">Dizayn: </span><a href="https://www.linkedin.com/in/nurlanisazade/" target="_blank">NI</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleMobile() {
+    const menu = document.getElementById('mobileMenu');
+    const btn = document.getElementById('hamburger');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+    document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeMobile() {
+    document.getElementById('mobileMenu').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  let currentLang = 'en';
+
+  function setLang(lang) {
+    currentLang = lang;
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      if (el.tagName === 'SPAN') {
+        el.style.display = el.dataset.lang === lang ? 'inline' : 'none';
+      } else {
+        el.style.display = el.dataset.lang === lang ? 'block' : 'none';
+      }
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
+    });
+  }
+
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  setLang('en');
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<svg width="100%" viewBox="0 0 680 520" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <clipPath id="circleClip">
+    <circle cx="340" cy="240" r="180"/>
+  </clipPath>
+  <style>
+    .ring1 { fill: none; stroke: #c8832a; stroke-width: 5; }
+    .ring2 { fill: none; stroke: #e8a84a; stroke-width: 2; opacity: 0.5; }
+    .bg-circle { fill: #f0e4c2; }
+    .silhouette { fill: #1a1410; }
+    .brand { font-family: 'Georgia', serif; fill: #1a1410; font-weight: 700; }
+    .amp { fill: #c8832a; font-family: 'Georgia', serif; font-weight: 700; }
+    .tagline { font-family: 'Georgia', serif; fill: #8a7060; font-size: 13px; letter-spacing: 3px; }
+    .sub { font-family: Arial, sans-serif; fill: #c8832a; font-size: 11px; letter-spacing: 5px; }
+  </style>
+</defs>
+
+<!-- outer ring glow -->
+<circle cx="340" cy="240" r="192" fill="none" stroke="#c8832a" stroke-width="1" opacity="0.2"/>
+
+<!-- main ring -->
+<circle cx="340" cy="240" r="185" class="ring1"/>
+<circle cx="340" cy="240" r="178" class="ring2"/>
+
+<!-- cream background -->
+<circle cx="340" cy="240" r="175" class="bg-circle"/>
+
+<!-- TABLE — simple rectangle -->
+<rect x="205" y="298" width="270" height="18" rx="3" class="silhouette"/>
+
+<!-- LEFT PERSON — man, leaning slightly forward -->
+<!-- body/torso -->
+<ellipse cx="278" cy="280" rx="32" ry="24" class="silhouette"/>
+<!-- head -->
+<circle cx="270" cy="238" r="26" class="silhouette"/>
+<!-- arm reaching to cup -->
+<path d="M295 270 Q318 262 325 258" fill="none" stroke="#1a1410" stroke-width="18" stroke-linecap="round"/>
+<!-- cup left -->
+<rect x="316" y="248" width="18" height="16" rx="3" class="silhouette"/>
+<path d="M334 254 Q342 254 342 260 Q342 266 334 266" fill="none" stroke="#1a1410" stroke-width="4" stroke-linecap="round"/>
+
+<!-- RIGHT PERSON — woman, facing left -->
+<!-- body/torso -->
+<ellipse cx="402" cy="280" rx="32" ry="24" class="silhouette"/>
+<!-- head with hair bun suggestion -->
+<circle cx="410" cy="238" r="26" class="silhouette"/>
+<!-- hair bun top -->
+<ellipse cx="416" cy="214" rx="11" ry="9" class="silhouette"/>
+<!-- arm reaching to cup -->
+<path d="M385 270 Q362 262 355 258" fill="none" stroke="#1a1410" stroke-width="18" stroke-linecap="round"/>
+<!-- cup right -->
+<rect x="346" y="248" width="18" height="16" rx="3" class="silhouette"/>
+<path d="M346 254 Q338 254 338 260 Q338 266 346 266" fill="none" stroke="#1a1410" stroke-width="4" stroke-linecap="round"/>
+
+<!-- steam wisps from cups -->
+<path d="M322 245 Q320 238 323 232 Q326 226 324 220" fill="none" stroke="#c8832a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+<path d="M352 245 Q354 238 351 232 Q348 226 350 220" fill="none" stroke="#c8832a" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+
+<!-- BRAND NAME below circle -->
+<text x="340" y="450" text-anchor="middle" font-family="'Georgia', serif" font-size="42" font-weight="700" fill="#1a1410" letter-spacing="4">ME <tspan fill="#c8832a">&amp;</tspan> YOU</text>
+
+<!-- tagline -->
+<text x="340" y="480" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#8a7060" letter-spacing="5">BAKU · COFFEE SHOP</text>
+
+<!-- decorative dots either side of brand -->
+<circle cx="168" cy="449" r="3" fill="#c8832a" opacity="0.6"/>
+<circle cx="512" cy="449" r="3" fill="#c8832a" opacity="0.6"/>
+</svg>
